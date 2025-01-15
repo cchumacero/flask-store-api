@@ -24,3 +24,21 @@ class ProductModel():
             return products
         except Exception as ex:
             raise Exception(ex)
+
+    @classmethod
+    def get_product(self, id):
+        try:
+            connection = get_connection()
+            
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "SELECT * FROM products WHERE id = %s", (id,))
+                row = cursor.fetchone()
+                single_product = Product(
+                        row[0], row[1], row[2], row[3], row[4], row[5])
+                 
+
+            connection.close()
+            return single_product.to_JSON()
+        except Exception as ex:
+            raise Exception(ex)
