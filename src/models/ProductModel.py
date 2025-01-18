@@ -34,11 +34,15 @@ class ProductModel():
                 cursor.execute(
                     "SELECT * FROM products WHERE id = %s", (id,))
                 row = cursor.fetchone()
-                single_product = Product(
-                        row[0], row[1], row[2], row[3], row[4], row[5])
+                single_product = None
+                if row is not None:
+                    single_product = Product(
+                            row[0], row[1], row[2], row[3], row[4], row[5])
                  
 
             connection.close()
-            return single_product.to_JSON()
+            if single_product is not None:
+                return single_product.to_JSON()
+            else: return single_product
         except Exception as ex:
             raise Exception(ex)

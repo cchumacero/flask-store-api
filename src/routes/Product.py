@@ -17,6 +17,9 @@ def get_products():
 def get_single_product(id):
     try:
         product = ProductModel.get_product(id)
+        if product is None:
+            return jsonify({'message': "Value Not Found"}), 404
         return jsonify(product)
     except Exception as ex:
+        
         return jsonify({'message': str(ex)}), 500  
