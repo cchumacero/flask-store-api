@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 
 # Models
 from models.ProductModel import ProductModel
@@ -22,4 +22,13 @@ def get_single_product(id):
         return jsonify(product)
     except Exception as ex:
         
+        return jsonify({'message': str(ex)}), 500  
+    
+
+@main.route('/', methods=['POST'])
+def create_product():
+    try:
+        
+        return jsonify({'new product id': ProductModel.create_product(request.json)})
+    except Exception as ex:
         return jsonify({'message': str(ex)}), 500  

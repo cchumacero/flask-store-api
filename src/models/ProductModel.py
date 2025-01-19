@@ -46,3 +46,21 @@ class ProductModel():
             else: return single_product
         except Exception as ex:
             raise Exception(ex)
+    
+    @classmethod
+    def create_product(self, product):
+        try:
+            connection = get_connection()
+            
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "INSERT INTO products (title, price, description, category, images) VALUES (%s, %s, %s, %s, %s) RETURNING id",
+                    (product['title'], product['price'], product['description'], product['categoryId'], product['images'])
+                )
+                new_product_id = cursor.fetchone()[0]
+                connection.commit()
+                
+            connection.close()
+            return new_product_id
+        except Exception as ex:
+            raise Exception(ex)
