@@ -31,6 +31,18 @@ def create_product():
         return jsonify({'new product id': ProductModel.create_product(request.json)})
     except Exception as ex:
         return jsonify({'message': str(ex)}), 500
+
+@main.route('/<id>', methods=['PUT'])
+def update_product(id):
+    try:
+        updated_rows = ProductModel.update_product(id, request.json)
+        if updated_rows == 1:
+            updated_product = ProductModel.get_product(id)
+            return jsonify(updated_product)
+        else:
+            return str(False)
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 500
     
 @main.route('/<id>', methods=['DELETE'])
 def delete_product(id):
@@ -38,6 +50,6 @@ def delete_product(id):
         deleted_rows = ProductModel.delete_product(id)
         if deleted_rows == 1:
             return str(True)
-        else: return str(False)
+        else: return str(False), 404
     except Exception as ex:
         return jsonify({'message': str(ex)}), 500  
