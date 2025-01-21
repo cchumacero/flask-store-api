@@ -64,3 +64,20 @@ class ProductModel():
             return new_product_id
         except Exception as ex:
             raise Exception(ex)
+        
+    @classmethod
+    def delete_product(self, id):
+        try:
+            connection = get_connection()
+            
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "DELETE FROM products WHERE id =%s", (id,)
+                )
+                affected_rows = cursor.rowcount
+                connection.commit()
+                
+            connection.close()
+            return affected_rows
+        except Exception as ex:
+            raise Exception(ex)

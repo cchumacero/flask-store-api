@@ -28,7 +28,16 @@ def get_single_product(id):
 @main.route('/', methods=['POST'])
 def create_product():
     try:
-        
         return jsonify({'new product id': ProductModel.create_product(request.json)})
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 500
+    
+@main.route('/<id>', methods=['DELETE'])
+def delete_product(id):
+    try:
+        deleted_rows = ProductModel.delete_product(id)
+        if deleted_rows == 1:
+            return str(True)
+        else: return str(False)
     except Exception as ex:
         return jsonify({'message': str(ex)}), 500  
