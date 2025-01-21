@@ -8,7 +8,13 @@ main = Blueprint('product_blueprint', __name__)
 @main.route('/')
 def get_products():
     try:
-        products = ProductModel.get_products()
+        if len(request.args.keys()) == 0:
+            products = ProductModel.get_products()
+        else:
+            limit = request.args.get('limit')
+            offset = request.args.get('offset')
+            products = ProductModel.get_limited_products(limit, offset)
+        
         return jsonify(products)
     except Exception as ex:
         return jsonify({'message': str(ex)}), 500
